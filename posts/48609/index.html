@@ -19,16 +19,16 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="译注原文发表于 Unreal Community Wiki：Pointer Types  译者：王质：           虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。   托管指针托管指针适用于虚幻引擎的垃圾回收系统，这些指针只能指向 UObject 类型及其子类。   （参见：引用资产 - 虚幻引擎">
+    <meta name="description" content="译注原文发表于 Unreal Community Wiki：Pointer Types  译者：王质：          下载 PDF 版本：Google Drive  虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。   托管指针托管指针适用于虚幻引擎的垃圾回收系统，这些指针只能指向 UObject 类型">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[UE][译]虚幻引擎中的 UObject 指针与「智能」指针">
 <meta property="og:url" content="http://example.com/posts/48609/index.html">
 <meta property="og:site_name" content="王质的 Blog">
-<meta property="og:description" content="译注原文发表于 Unreal Community Wiki：Pointer Types  译者：王质：           虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。   托管指针托管指针适用于虚幻引擎的垃圾回收系统，这些指针只能指向 UObject 类型及其子类。   （参见：引用资产 - 虚幻引擎">
+<meta property="og:description" content="译注原文发表于 Unreal Community Wiki：Pointer Types  译者：王质：          下载 PDF 版本：Google Drive  虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。   托管指针托管指针适用于虚幻引擎的垃圾回收系统，这些指针只能指向 UObject 类型">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img.shields.io/badge/Twitter-%40wangzhi4ever-%231D9BF0?style=flat&logo=twitter&logoColor=%231D9BF0">
 <meta property="article:published_time" content="2024-05-24T12:17:09.000Z">
-<meta property="article:modified_time" content="2024-05-25T17:40:29.078Z">
+<meta property="article:modified_time" content="2024-05-26T08:00:48.744Z">
 <meta property="article:author" content="王质 | Wang Zhi">
 <meta property="article:tag" content="Unreal Engine">
 <meta name="twitter:card" content="summary">
@@ -200,7 +200,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-26 01:40:29" itemprop="dateModified" datetime="2024-05-26T01:40:29+08:00">2024-05-26</time>
+      <time title="Modified: 2024-05-26 16:00:48" itemprop="dateModified" datetime="2024-05-26T16:00:48+08:00">2024-05-26</time>
     </span>
 
   
@@ -234,6 +234,7 @@
 </a>
 </div>
 
+<p>下载 PDF 版本：<a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1YDFM4kPHReg2WtSiKkQH72C2IgCTtsiq/view?usp=sharing">Google Drive</a></p>
 <hr>
 <p>虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。  </p>
 <h1 id="托管指针"><a href="#托管指针" class="headerlink" title="托管指针"></a>托管指针</h1><p>托管指针适用于虚幻引擎的垃圾回收系统，这些指针只能指向 <code>UObject</code> 类型及其子类。  </p>

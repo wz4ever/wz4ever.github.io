@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="译注  原文发表于 Unreal Community Wiki：Logging    译者：王质：          下载 PDF 版本：Google Drive、百度网盘  关于日志日志是对运行时某个时刻的事件、函数调用、变量值等等进行的有序记录，通常以文本格式保存在日志文件中。对于软件开发人员来说，它是一个非常宝贵的工具，特别在调试时，因为它可以提供有关代码在某一时刻正在执行操作的详细信息。例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在虚幻引擎中使用 C++ 打印日志">
+<meta property="og:url" content="http://example.com/posts/59040/index.html">
+<meta property="og:site_name" content="王质的 Blog">
+<meta property="og:description" content="译注  原文发表于 Unreal Community Wiki：Logging    译者：王质：          下载 PDF 版本：Google Drive、百度网盘  关于日志日志是对运行时某个时刻的事件、函数调用、变量值等等进行的有序记录，通常以文本格式保存在日志文件中。对于软件开发人员来说，它是一个非常宝贵的工具，特别在调试时，因为它可以提供有关代码在某一时刻正在执行操作的详细信息。例">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img.shields.io/badge/Twitter-%40wangzhi4ever-%231D9BF0?style=flat&logo=twitter&logoColor=%231D9BF0">
+<meta property="article:published_time" content="2024-06-14T12:56:58.000Z">
+<meta property="article:modified_time" content="2024-06-19T04:25:56.952Z">
+<meta property="article:author" content="王质 | Wang Zhi">
+<meta property="article:tag" content="Unreal Engine">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img.shields.io/badge/Twitter-%40wangzhi4ever-%231D9BF0?style=flat&logo=twitter&logoColor=%231D9BF0">
+
+
+<link rel="canonical" href="http://example.com/posts/59040/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"http://example.com/posts/59040/","path":"posts/59040/","title":"在虚幻引擎中使用 C++ 打印日志"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>在虚幻引擎中使用 C++ 打印日志 | 王质的 Blog</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-21H5PKFM3E"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-21H5PKFM3E","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">王质的 Blog</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Wang Zhi's Blog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%91%E6%B3%A8"><span class="nav-number">1.</span> <span class="nav-text">译注</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%97%A5%E5%BF%97"><span class="nav-number">2.</span> <span class="nav-text">关于日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-UE-LOG-%E6%89%93%E5%8D%B0%E6%97%A5%E5%BF%97"><span class="nav-number">3.</span> <span class="nav-text">使用 UE_LOG 打印日志</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BE%93%E5%87%BA%E5%BF%AB%E9%80%9F%E5%8F%82%E8%80%83"><span class="nav-number">3.1.</span> <span class="nav-text">格式化输出快速参考</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-UE-LOGFMT-%E6%89%93%E5%8D%B0%E6%97%A5%E5%BF%97%EF%BC%88UE5%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">使用 UE_LOGFMT 打印日志（UE5）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E4%BD%8D%E7%BD%AE%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">基于位置的参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">命名参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97"><span class="nav-number">5.</span> <span class="nav-text">查看日志</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E8%AF%A6%E7%BB%86%E7%BA%A7%E5%88%AB"><span class="nav-number">5.1.</span> <span class="nav-text">日志详细级别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E6%97%A5%E5%BF%97%E8%AF%A6%E7%BB%86%E7%BA%A7%E5%88%AB"><span class="nav-number">5.1.1.</span> <span class="nav-text">修改默认日志详细级别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%97%A5%E5%BF%97%E5%88%86%E7%B1%BB"><span class="nav-number">6.</span> <span class="nav-text">自定义日志分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E5%B1%8F%E5%B9%95%E4%B8%8A%E6%89%93%E5%8D%B0%E6%B6%88%E6%81%AF"><span class="nav-number">7.</span> <span class="nav-text">在屏幕上打印消息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%91%E8%A7%86%E5%8F%A3%E7%BB%9F%E8%AE%A1%E5%AD%90%E7%B3%BB%E7%BB%9F%E6%B7%BB%E5%8A%A0%E6%B6%88%E6%81%AF"><span class="nav-number">8.</span> <span class="nav-text">向视口统计子系统添加消息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E8%B5%84%E6%96%99"><span class="nav-number">9.</span> <span class="nav-text">其他资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="王质 | Wang Zhi"
+      src="/images/head.png">
+  <p class="site-author-name" itemprop="name">王质 | Wang Zhi</p>
+  <div class="site-description" itemprop="description">Game as a Vocation.</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://x.com/wangzhi4ever" title="Twitter → https:&#x2F;&#x2F;x.com&#x2F;wangzhi4ever" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.douban.com/people/wangzhi4ever" title="豆瓣 → https:&#x2F;&#x2F;www.douban.com&#x2F;people&#x2F;wangzhi4ever" rel="noopener me" target="_blank">豆瓣</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wangzhi4ever@gmail.com" title="E-Mail → mailto:wangzhi4ever@gmail.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/posts/59040/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.png">
+      <meta itemprop="name" content="王质 | Wang Zhi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="王质的 Blog">
+      <meta itemprop="description" content="Game as a Vocation.">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="在虚幻引擎中使用 C++ 打印日志 | 王质的 Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在虚幻引擎中使用 C++ 打印日志
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2024-06-14 20:56:58" itemprop="dateCreated datePublished" datetime="2024-06-14T20:56:58+08:00">2024-06-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2024-06-19 12:25:56" itemprop="dateModified" datetime="2024-06-19T12:25:56+08:00">2024-06-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">In</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">游戏开发</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/posts/59040/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="posts/59040/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="译注"><a href="#译注" class="headerlink" title="译注"></a>译注</h1><!-- 原文发表于 Unreal Community Wiki：[Logging](https://unrealcommunity.wiki/logging-lgpidy6i#logging-using-ue_logfmt)  -->
+<div>
+原文发表于 Unreal Community Wiki：<a target="_blank" rel="noopener" href="https://unrealcommunity.wiki/logging-lgpidy6i#logging-using-ue_logfmt">Logging</a>
+</div>
+
+<div>
+译者：王质：
+<a target="_blank" rel="noopener" href="https://x.com/wangzhi4ever" style="border-bottom:none;">
+    <img alt="Static Badge" src="https://img.shields.io/badge/Twitter-%40wangzhi4ever-%231D9BF0?style=flat&logo=twitter&logoColor=%231D9BF0" style="margin-right:5px;margin-bottom:0px;display:inline;vertical-align:middle;">
+</a>
+</div>
+
+<p>下载 PDF 版本：<a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1nmVN0E-vBAO7RCVlztv2VTzN19fJt1lu/view?usp=drive_link">Google Drive</a>、<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1pIS1sbsTpLzp8D1ApYqISw?pwd=wz4e">百度网盘</a></p>
+<hr>
+<h1 id="关于日志"><a href="#关于日志" class="headerlink" title="关于日志"></a>关于日志</h1><p>日志是对运行时某个时刻的事件、函数调用、变量值等等进行的有序记录，通常以文本格式保存在日志文件中。对于软件开发人员来说，它是一个非常宝贵的工具，特别在调试时，因为它可以提供有关代码在某一时刻正在执行操作的详细信息。例如，可以使用日志来确认某些代码块正在执行、检查函数之间传递的数据以及报告其他潜在的问题。  </p>
+<p>虚幻引擎中的日志系统实际上是一个相当复杂的主题，有很多种方法可以打印日志。在本文中，我们将介绍几种打印日志以及与日志进行交互的方法。  </p>
+<hr>
+<h1 id="使用-UE-LOG-打印日志"><a href="#使用-UE-LOG-打印日志" class="headerlink" title="使用 UE_LOG 打印日志"></a>使用 UE_LOG 打印日志</h1><span id="more"></span>
+
+<p>以下是一个简单的打印日志消息的示例：  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Hello&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p><code>UE_LOG</code> 宏用于将消息打印到日志文件。宏的第一个参数是日志的分类，引擎中预定义了很多种日志分类，定义在 CoreGlobals.h 头文件中。你也可以创建自定义的日志分类，在后文中我们将对此进行介绍。  </p>
+<p><code>UE_LOG</code> 宏的第二个参数是日志信息的分级。示例中最后一个参数是消息文本本身，如果使用格式化输出的话，还可以增加更多的参数，后文将进行详细介绍。  </p>
+<h2 id="格式化输出快速参考"><a href="#格式化输出快速参考" class="headerlink" title="格式化输出快速参考"></a>格式化输出快速参考</h2><ul>
+<li>打印一个 FString</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;The Actor&#x27;s name is %s&quot;</span>), *YourActor-&gt;<span class="built_in">GetName</span>());</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>打印一个 bool</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;The boolean value is %s&quot;</span>), ( bYourBool ? <span class="built_in">TEXT</span>(<span class="string">&quot;true&quot;</span>) : <span class="built_in">TEXT</span>(<span class="string">&quot;false&quot;</span>) ));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>打印一个 int</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;The integer value is: %d&quot;</span>), YourInteger);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>打印一个 float</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;The float value is: %f&quot;</span>), YourFloat);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>打印一个 FVector</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;The vector value is: %s&quot;</span>), *YourVector.<span class="built_in">ToString</span>());</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用多个说明符进行打印</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOG</span>(LogTemp, Warning, <span class="built_in">TEXT</span>(<span class="string">&quot;Current values are: vector %s, float %f, and integer %d&quot;</span>), *YourVector.<span class="built_in">ToString</span>(), YourFloat, YourInteger);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="使用-UE-LOGFMT-打印日志（UE5）"><a href="#使用-UE-LOGFMT-打印日志（UE5）" class="headerlink" title="使用 UE_LOGFMT 打印日志（UE5）"></a>使用 UE_LOGFMT 打印日志（UE5）</h1><blockquote>
+<p><strong>警告</strong><br>此宏是在 UE 5.2 版本中被引入的，更早的版本中可能不能使用。<br>为了使用 <code>UE_LOGFMT</code> 需要引用 <code>#include &quot;Logging/StructuredLog.h&quot;</code> 头文件。</p>
+</blockquote>
+<p>有经验的 UE 开发者都对 <code>UE_LOG</code> 非常熟悉了，它的缺点非常明显。  </p>
+<p><code>UE_LOG</code> 非常冗长，需要开发人员不断地将日志文本包装在 <code>TEXT</code> 宏之中。  </p>
+<p><code>UE_LOG</code> 无法打印一些基本类型，如布尔类型或 <code>FString</code> （UE 的标准字符串类型）。  </p>
+<p><code>UE_LOG</code> 在打印不同的变量时（如浮点、整数、布尔、字符串等等）时需要了解变量的类型。  </p>
+<p>新的 <code>UE_LOGFMT</code> 宏有助于缓解其中许多问题。简单来说，<code>UE_LOGFMT</code> 可以通过以下方式使用：  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOGFMT</span>(LogTemp, Log, <span class="string">&quot;This message will print to my log&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>当需要将变量打印到日志中时，<code>UE_LOGFMT</code> 提供了一个更清晰、更一致的语法，像下面这样：  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">FString <span class="title">Name</span><span class="params">(<span class="string">&quot;SomeName&quot;</span>)</span></span>;</span><br><span class="line">int32 Value = <span class="number">999</span>;</span><br><span class="line"><span class="built_in">UE_LOGFMT</span>(LogTemp, Log, <span class="string">&quot;Printing my Name &#123;0&#125; with Value &#123;1&#125;&quot;</span>, Name, Value);</span><br></pre></td></tr></table></figure>
+
+<p><code>UE_LOGFMT</code> 可以通过两种方式接收参数：</p>
+<h2 id="基于位置的参数"><a href="#基于位置的参数" class="headerlink" title="基于位置的参数"></a>基于位置的参数</h2><p>字段值必须与日志里引用的字段完全匹配。  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOGFMT</span>(LogCore, Warning, <span class="string">&quot;Loading &#x27;&#123;0&#125;&#x27; failed with error &#123;1&#125;&quot;</span>, Package-&gt;<span class="built_in">GetName</span>(), ErrorCode);</span><br></pre></td></tr></table></figure>
+
+<p>在本例中，日志中的第一个变量 <code>&#123;0&#125;</code> 被 <code>Package-&gt;GetName()</code> 的值替换。第二个变量 <code>&#123;1&#125;</code> 被 <code>ErrorCode</code> 的值替换。<code>Package-&gt;GetName()</code> 和 <code>ErrorCode</code> 的顺序至关重要。  </p>
+<h2 id="命名参数"><a href="#命名参数" class="headerlink" title="命名参数"></a>命名参数</h2><p>参数中必须包含格式化字符串所引用的每个字段。顺序无关紧要，而且允许使用额外的字段。  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">UE_LOGFMT</span>(LogCore, Warning, <span class="string">&quot;Loading &#x27;&#123;Name&#125;&#x27; failed with error &#123;Error&#125;&quot;</span>, (<span class="string">&quot;Error&quot;</span>, ErrorCode), (<span class="string">&quot;Name&quot;</span>, Package-&gt;<span class="built_in">GetName</span>()), (<span class="string">&quot;Flags&quot;</span>, LoadFlags));</span><br></pre></td></tr></table></figure>
+
+<p>在本例中，日志中的第一个变量 <code>&#123;Name&#125;</code> 被替换为 <code>(&quot;Name&quot;, ...)</code> 标识符捆绑的值。第二个变量 <code>&#123;Error&#125;</code> 被替换为 <code>(&quot;Error&quot;, ...)</code> 标识符捆绑的值。  </p>
+<hr>
+<h1 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h1><p>有多种方式可以查看虚幻引擎中的日志：  </p>
+<ul>
+<li><p>如果您的 PIE 会话已经结束，您可以在 YourProjectName\Saved\Logs 文件夹中找到该会话的完整日志。之前会话的日志也会保存在那里，以备您的随时访问。如果您不知道您的项目位于什么路径，您可以在 Epic Games Launcher 中右键单击您的项目，然后选择 Show in Folder 选项。  </p>
+</li>
+<li><p>您可以在 Output 选项卡实时查看 PIE 模式下的日志输出。如果该选项卡没有被默认打开，在 UE4 中可以通过如下的方式找到它：Window&#x2F;Developer Tools&#x2F;Output Log，在 UE5 中则是：Window&#x2F;Output Log。</p>
+</li>
+<li><p>如果您有一个可执行文件，则可以创建一个快捷方式，在路径末尾添加 -Log，以便在启动可执行文件时开启日志。  </p>
+</li>
+<li><p>您可以在游戏运行时按波浪键（~）打开控制台，键入 <code>showlog</code> 控制台命令并按回车键访问日志。请注意，如果您在 PIE 会话期间执行此操作，则单机 x 关闭日志的同时将关闭您的虚幻编辑器会话。</p>
+</li>
+</ul>
+<h2 id="日志详细级别"><a href="#日志详细级别" class="headerlink" title="日志详细级别"></a>日志详细级别</h2><p>在某些情况下，可以查看更详细或者更粗略的日志将会很有用。日志详细级别将会允许您轻松控制特定日志的详细级别。如果特定的日志语句的详细级别级别比编译时设置的日志详细级别更高（更详细），该语句将不会被编译。然后，全部日志都会被设置为默认的详细级别，您可以在 Engine.ini 文件中对其进行修改。您也可以在运行时通过命令行修改详细级别。给定一个特定的详细级别，只有详细级别小于等于该级别的日志会被打印。详细级别较高的消息将被忽略。  </p>
+<p>下表列出了所有可用的详细级别（详细级别从上到下依次递增）：  </p>
+<table>
+<thead>
+<tr>
+<th>详细级别</th>
+<th>是否在 Console 中打印</th>
+<th>是否在编辑器 Log 选项卡中打印</th>
+<th>注释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fatal</td>
+<td>Yes</td>
+<td>N&#x2F;A</td>
+<td>使会话崩溃，即便日志被禁用。</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>红色的日志文本。</td>
+</tr>
+<tr>
+<td>Warning</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>黄色的日志文本。</td>
+</tr>
+<tr>
+<td>Display</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>灰色的日志文本。</td>
+</tr>
+<tr>
+<td>Log</td>
+<td>No</td>
+<td>Yes</td>
+<td>灰色的日志文本。</td>
+</tr>
+<tr>
+<td>Verbose</td>
+<td>No</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>VeryVerbose</td>
+<td>No</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>每一条日志语句都需要声明它属于哪一个日志分类以及它的详细级别。 </p>
+<h3 id="修改默认日志详细级别"><a href="#修改默认日志详细级别" class="headerlink" title="修改默认日志详细级别"></a>修改默认日志详细级别</h3><ul>
+<li>在 Engine.ini 文件中设置日志详细级别</li>
+</ul>
+<p>每个日志分类的详细级别可以在 Engine.ini 或者 DefaultEngine.ini 文件中进行设置。  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[Core.Log]</span><br><span class="line">Global=</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过启动可执行文件的命令行参数设置日志详细级别</li>
+</ul>
+<p>每个日志类别的详细级别也可以在编辑器中或者启动游戏时添加命令行参数来设置。在启动可执行文件的命令行末尾添加如下标志。    </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-LogCmds=<span class="string">&quot;global Verbose, LogPython Verbose, LogAnimMontage off, LogDeepDriveAgent VeryVerbose&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在运行时修改日志详细级别</li>
+</ul>
+<p>每个日志类别的详细级别也能够在运行时通过命令行进行设置。当游戏开始运行后，打开命令行并运行如下命令：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="自定义日志分类"><a href="#自定义日志分类" class="headerlink" title="自定义日志分类"></a>自定义日志分类</h1><p>创建您自己的日志类别将使解析日志文件变得容易，因为您可以在「日志输出」选项卡中切换日志类别的可见性。为项目中的每个主要系统创建一个新的日志类别通常是一个好主意，例如程序化关卡生成器、游戏模式等等。  </p>
+<p>您可以在您需要使用日志分类的地方设置如下两段代码来定义一个新的日志分类。您可以将这两段代码放到您的文件中，然后在任何需要的地方 <code>#include</code> 它。这两段代码应该在代码的顶层，而不是在任何函数或者类中。  </p>
+<ul>
+<li>头文件</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">DECLARE_LOG_CATEGORY_EXTERN</span>(LogCustom, Log, All);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>源文件</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">DEFINE_LOG_CATEGORY</span>(LogCustom);</span><br></pre></td></tr></table></figure>
+
+<p>头文件代码片段的语法结构为 <code>DECLARE_LOG_CATEGORY_EXTERN(CategoryName, DefaultVerbosity, CompileTimeVerbosity)</code>。<strong>DefaultVerbosity</strong> 是未在 ini 文件或在命令行中设置详细级别时使用的详细级别。任何比其级别更高的日志都不会被打印。<strong>CompileTimeVerbosity</strong> 是代码编译时的最大细节级别，任何比该级别高的日志代码都不会被编译。  </p>
+<blockquote>
+<p><strong>提示</strong><br>日志分类通常以 Log 作为前缀，但这不是必须的。遵循此约定可以使您很方便的按字母顺序对日志分类进行排序。  </p>
+</blockquote>
+<blockquote>
+<p><strong>警告</strong><br>把 <strong>CompileTimeVervosity</strong> 设置为除了 All 之外的其他值可能会导致你的日志不会被输出。  </p>
+</blockquote>
+<hr>
+<h1 id="在屏幕上打印消息"><a href="#在屏幕上打印消息" class="headerlink" title="在屏幕上打印消息"></a>在屏幕上打印消息</h1><p>严格来说，在运行时将消息打印到屏幕上不能被算作日志，因为消息不会被保存到文件中。但是，在开发或调试时，它通常比日志更加方便，因为它允许您直接在游戏窗口中查看消息，而无需为日志打开单独的窗口。从实时的变量值到函数调用顺序，任何内容都可以通过这种方式轻松地查看。  </p>
+<p>这是一个输出简单字符串消息的例子：  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GEngine-&gt;<span class="built_in">AddOnScreenDebugMessage</span>(<span class="number">-1</span>, <span class="number">5.f</span>, FColor::White, <span class="built_in">TEXT</span>(<span class="string">&quot;This message will appear on the screen!&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数是键，如果该参数被设置为 -1，每次执行此代码时，屏幕上都会添加一条新消息。举个例子，如果把这条语句添加到 <code>Tick()</code> 函数中，屏幕会迅速被这条消息填满。如果把键设置为正整数（键的类型为 <code>uint64</code>），新的消息会代替那些跟它具有相同的键的旧有的消息。例如，还是把这条语句添加到 <code>Tick()</code> 函数中，但是把它的键设置为 1，那么只有一条消息会显示在屏幕上，因为每条新的消息都会替换掉原先的那一个。  </p>
+<p>第二个参数是消息显示的时间（秒数），是浮点类型。  </p>
+<p>第三个参数是消息文本的颜色，是 <code>FColor</code> 类型的。最好使用相对于游戏画面背景易于识别的颜色。最简单的方法是使用预定义的颜色常量，例如 <code>FColor::White</code>。在<a target="_blank" rel="noopener" href="https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/Core/Math/FColor?application_version=5.4">这篇官方文档</a>的底部可以看到所有预定义颜色常量组成的列表。  </p>
+<p>第四个参数是消息文本本身。需要注意的是，整个字符串必须只占用一个参数，因此，输出格式化字符串需要使用 <code>FString::Printf()</code> 函数。  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GEngine-&gt;<span class="built_in">AddOnScreenDebugMessage</span>(<span class="number">-1</span>, <span class="number">5.f</span>, FColor::Red, FString::<span class="built_in">Printf</span>(<span class="built_in">TEXT</span>(<span class="string">&quot;Some variable values: x = %f, y = %f&quot;</span>), x, y));</span><br></pre></td></tr></table></figure>
+
+<p><code>AddOnScreenDebugMessage()</code> 还有两个可选的参数。第五个参数是一个布尔值，用来决定新的消息是出现在消息列表上方（true）还是下方（false）。请注意，这只适用于键被设置为 -1 的情况。第六个参数是一个表示文本尺寸的 2D Vector，这对于文本太小难以阅读或者太大占有过多的屏幕空间的情况非常有用。  </p>
+<blockquote>
+<p><strong>提示</strong><br>Visual Studio 经常在 <code>GEngine</code> 变量下面标识下划线提示其未定义，但其实你可以正常使用它，没有必要引入 Engine.h 或者 EngineGlobals.h 头文件。  </p>
+</blockquote>
+<hr>
+<h1 id="向视口统计子系统添加消息"><a href="#向视口统计子系统添加消息" class="headerlink" title="向视口统计子系统添加消息"></a>向视口统计子系统添加消息</h1><p>4.26 版本增加了视口统计子系统（Viewport Stats Subsystem），允许向当前视口添加诸如「LIGHTING NEEDS TO BE REBUILT」或「BLUEPRINT COMPILE ERROR」之类的消息。下面的代码示例是直接从此类复制粘贴的，查看此类即可了解所有可用选项。  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (UViewportStatsSubsystem* ViewportSubsystem = <span class="built_in">GetWorld</span>()-&gt;<span class="built_in">GetSubsystem</span>())</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Bind a member function delegate to the subsystem...</span></span><br><span class="line">	FViewportDisplayCallback Callback;</span><br><span class="line">	Callback.<span class="built_in">BindDynamic</span>(<span class="keyword">this</span>, &amp;UCustomClass::DisplayViewportMessage);</span><br><span class="line">	ViewportSubsystem-&gt;<span class="built_in">AddDisplayDelegate</span>(Callback);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// ... or use inline lambda functions</span></span><br><span class="line">	ViewportSubsystem-&gt;<span class="built_in">AddDisplayDelegate</span>([](FText&amp; OutText, FLinearColor&amp; OutColor)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// Some kind of state management</span></span><br><span class="line">		OutText = <span class="built_in">NSLOCTEXT</span>(<span class="string">&quot;FooNamespace&quot;</span>, <span class="string">&quot;Blarg&quot;</span>, <span class="string">&quot;Display message here&quot;</span>);</span><br><span class="line">		OutColor = FLinearColor::Red;</span><br><span class="line">		<span class="keyword">return</span> bShouldDisplay;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h1 id="其他资料"><a href="#其他资料" class="headerlink" title="其他资料"></a>其他资料</h1><p><a target="_blank" rel="noopener" href="https://unrealcommunity.wiki/logs-printing-class-name-function-name-line-number-gk6wlnhk">Logging with Line Numbers</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="followme">
+  <span>Welcome to my other publishing channels</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://x.com/wangzhi4ever">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Unreal-Engine/" rel="tag"># Unreal Engine</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/48609/" rel="prev" title="虚幻引擎中的 UObject 指针与「智能」指针">
+                  <i class="fa fa-angle-left"></i> 虚幻引擎中的 UObject 指针与「智能」指针
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">王质 | Wang Zhi</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"blog-wangzhi","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -19,17 +19,18 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="译注原文发表于 Unreal Community Wiki：Pointer Types  译者：王质：          下载 PDF 版本：Google Drive、百度网盘  虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。   托管指针">
+    <meta name="description" content="译注   原文发表于 Unreal Community Wiki：Pointer Types    译者：王质：          下载 PDF 版本：Google Drive、百度网盘  虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。   托管指针">
 <meta property="og:type" content="article">
 <meta property="og:title" content="虚幻引擎中的 UObject 指针与「智能」指针">
 <meta property="og:url" content="http://example.com/posts/48609/index.html">
 <meta property="og:site_name" content="王质的 Blog">
-<meta property="og:description" content="译注原文发表于 Unreal Community Wiki：Pointer Types  译者：王质：          下载 PDF 版本：Google Drive、百度网盘  虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。   托管指针">
+<meta property="og:description" content="译注   原文发表于 Unreal Community Wiki：Pointer Types    译者：王质：          下载 PDF 版本：Google Drive、百度网盘  虚幻引擎提供了包含很多不同种类指针的指针库，其中一些指针由虚幻的 RTTI 和垃圾回收系统管理，而另外一些是非托管的，开发人员必须谨慎使用。   托管指针">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://img.shields.io/badge/Twitter-%40wangzhi4ever-%231D9BF0?style=flat&logo=twitter&logoColor=%231D9BF0">
 <meta property="article:published_time" content="2024-05-24T12:17:09.000Z">
-<meta property="article:modified_time" content="2024-05-26T13:13:27.289Z">
+<meta property="article:modified_time" content="2024-06-19T04:15:01.738Z">
 <meta property="article:author" content="王质 | Wang Zhi">
+<meta property="article:tag" content="Unreal Engine">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://img.shields.io/badge/Twitter-%40wangzhi4ever-%231D9BF0?style=flat&logo=twitter&logoColor=%231D9BF0">
 
@@ -132,7 +133,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -217,7 +218,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-26 21:13:27" itemprop="dateModified" datetime="2024-05-26T21:13:27+08:00">2024-05-26</time>
+      <time title="Modified: 2024-06-19 12:15:01" itemprop="dateModified" datetime="2024-06-19T12:15:01+08:00">2024-06-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -252,13 +253,18 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="译注"><a href="#译注" class="headerlink" title="译注"></a>译注</h1><p>原文发表于 Unreal Community Wiki：<a target="_blank" rel="noopener" href="https://unrealcommunity.wiki/pointer-types-m33pysxg">Pointer Types</a></p>
-<p>
+    <div class="post-body" itemprop="articleBody"><h1 id="译注"><a href="#译注" class="headerlink" title="译注"></a>译注</h1><!-- 原文发表于 Unreal Community Wiki：[Pointer Types](https://unrealcommunity.wiki/pointer-types-m33pysxg) -->
+
+<div>
+原文发表于 Unreal Community Wiki：<a target="_blank" rel="noopener" href="https://unrealcommunity.wiki/pointer-types-m33pysxg">Pointer Types</a>
+</div>
+
+<div>
 译者：王质：
 <a target="_blank" rel="noopener" href="https://x.com/wangzhi4ever" style="border-bottom:none;">
     <img alt="Static Badge" src="https://img.shields.io/badge/Twitter-%40wangzhi4ever-%231D9BF0?style=flat&logo=twitter&logoColor=%231D9BF0" style="margin-right:5px;margin-bottom:0px;display:inline;vertical-align:middle;">
 </a>
-</p>
+</div>
 
 <p>下载 PDF 版本：<a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1YDFM4kPHReg2WtSiKkQH72C2IgCTtsiq/view?usp=sharing">Google Drive</a>、<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/137MMw1ZWGn3-kj9PjAVZQw?pwd=wz4e">百度网盘</a></p>
 <hr>
@@ -325,6 +331,9 @@
   </div>
 </div>
 
+          <div class="post-tags">
+              <a href="/tags/Unreal-Engine/" rel="tag"># Unreal Engine</a>
+          </div>
 
         
 
@@ -335,6 +344,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/posts/59040/" rel="next" title="在虚幻引擎中使用 C++ 打印日志">
+                  在虚幻引擎中使用 C++ 打印日志 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>

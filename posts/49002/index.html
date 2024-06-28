@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://example.com/posts/49002/tsoftclassptr-bp.png">
 <meta property="og:image" content="http://example.com/posts/49002/tweakobjectptr.png">
 <meta property="article:published_time" content="2024-05-20T10:41:26.000Z">
-<meta property="article:modified_time" content="2024-05-26T13:11:57.282Z">
+<meta property="article:modified_time" content="2024-06-28T04:14:19.545Z">
 <meta property="article:author" content="王质 | Wang Zhi">
 <meta property="article:tag" content="Unreal Engine">
 <meta name="twitter:card" content="summary">
@@ -227,7 +227,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2024-05-26 21:11:57" itemprop="dateModified" datetime="2024-05-26T21:11:57+08:00">2024-05-26</time>
+      <time title="Modified: 2024-06-28 12:14:19" itemprop="dateModified" datetime="2024-06-28T12:14:19+08:00">2024-06-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -333,7 +333,7 @@
 <center style="font-size:14px;font-weight:bold;color:#333333;">Actor 在另一个尚未被加载的关卡中，	但 property 仍保留其路径值</center>
 
 <p>如果你想引用一个已经被实例化了的 Actor 请使用 <code>TWeakObjectPtr</code>。</p>
-<p>编辑器中的默认值不能被设置为蓝图类型（<code>TSoftClassPtr</code> 可以），但是可以指向数据资产。</p>
+<p>编辑器中的默认值不能被设置为蓝图类（<code>TSoftClassPtr</code> 可以），但是可以指向数据资产。</p>
 <p>该值可以在蓝图实例的细节面板里设置为一个已经被加载的 Actor，或者在蓝图类里选择一个当前打开的地图里的任意一个 Actor。</p>
 <p>如果 <code>Get()</code> 函数被调用时指针指向的对象没有被加载，函数将会返回 <code>nullptr</code>。一旦被加载，将会返回一个匹配全名的 Actor，并将其缓存下来以备将来的查找。</p>
 <h2 id="TSoftClassPtr"><a href="#TSoftClassPtr" class="headerlink" title="TSoftClassPtr"></a>TSoftClassPtr</h2><img src="/posts/49002/tsoftclassptr-details.png" class="" title="蓝图类与蓝图实例细节面板中的 TSoftClassPtr">
@@ -345,7 +345,7 @@
 <center style="font-size:14px;font-weight:bold;color:#333333;">在蓝图中创建一个 Soft Class Pointer</center>
 
 <p><code>TSoftClassPtr</code> 是 <code>FSoftObjectPtr</code> 的模板化包装，可以像 <code>TSubclassOf</code> 一样工作，可以在 <strong>UProperties</strong> 中用于蓝图子类。</p>
-<p>用它来指向蓝图类型（ <code>UBlueprintGeneratedClass</code> ）时你可以查询它们是否被加载。也可以用于异步地加载类（或者同步加载，尽管这会带来一些问题）。</p>
+<p>用它来指向蓝图类（ <code>UBlueprintGeneratedClass</code> ）时你可以查询它们是否被加载。也可以用于异步地加载类（或者同步加载，尽管这会带来一些问题）。</p>
 <p>并不适用于 <strong>数据资产</strong>，因为他们不应该被实例化，可以使用 <code>TSoftObjectPtr</code> 取代它来指向数据资产。</p>
 <hr>
 <h1 id="Weak-Pointers"><a href="#Weak-Pointers" class="headerlink" title="Weak Pointers"></a>Weak Pointers</h1><p>Weak Pointer 不像 Soft Pointer 一样储存路径名称，它只能引用已经被实例化的对象。</p>
